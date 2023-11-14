@@ -49,13 +49,23 @@ file_names <- list.files(path = 'data_hw5/p2_data') %>%
   rename(file_name = value) %>%
   #iterating over file names, reading file, and create new variable in df
   mutate(
-    
-  )
+    data = map(str_c('./data_hw5/p2_data/', file_name), read_csv)) %>%
+  unnest(cols = data) %>%
+  pivot_longer(week_1:week_8,
+               names_to = 'week',
+               values_to = 'value')
   
 ```
 
 ```{r}
 #iterating over file names
 purrr::map(file_names$file_name, read_csv)
+```
+
+```{r}
+#iterating over file names attempt
+file_names %>%
+  mutate(data = map(str_c('./data_hw5/p2_data/', file_name), read_csv)) %>%
+  unnest(cols = data)
 ```
 
