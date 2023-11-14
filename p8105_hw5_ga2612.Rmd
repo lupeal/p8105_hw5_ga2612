@@ -27,11 +27,6 @@ homicide_data <- read_csv('data_hw5/homicide_data.csv')
 
 ## Problem 2
 
-
-Make a spaghetti plot showing observations on each subject over time, and comment on differences between groups.
-
-
-
 ```{r, message=FALSE}
 #loading data
 file_names <- list.files(path = 'data_hw5/p2_data') %>%
@@ -66,5 +61,8 @@ file_names %>%
   geom_line() +
   ggtitle('Observations per subjects between week 1 and 8')
 ```
+
+Based on the plot above, we can see that over time the participants with the experimental arm had increasing values over time. While those with the control arm had relatively consistent values over time, not much fluctuation. 
+
 
 
