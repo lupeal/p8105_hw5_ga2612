@@ -42,7 +42,7 @@ Make a spaghetti plot showing observations on each subject over time, and commen
 
 
 
-```{r}
+```{r, message=FALSE}
 #loading data
 file_names <- list.files(path = 'data_hw5/p2_data') %>%
   as_tibble() %>%
@@ -53,13 +53,19 @@ file_names <- list.files(path = 'data_hw5/p2_data') %>%
   unnest(cols = data) %>%
   pivot_longer(week_1:week_8,
                names_to = 'week',
-               values_to = 'value')
+               values_to = 'value') %>%
+  mutate(
+    #creating arm variable for either control or experimental
+    arm = case_when(
+      str_detect(file_name, 'con') ~ 'control',
+      TRUE ~ 'experimental'),
+    
+    #creating subject id variable
+    id = as.numeric(str_sub(file_name, start = 5, end = 6)),
+    
+    #updating week to numeric
+    week = as.numeric(str_sub(week, start = 6, end = 6)))
   
-```
-
-```{r}
-#iterating over file names
-purrr::map(file_names$file_name, read_csv)
 ```
 
 ```{r}
