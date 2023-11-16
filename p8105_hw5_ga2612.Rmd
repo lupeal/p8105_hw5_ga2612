@@ -27,10 +27,12 @@ homicide_data <- read_csv('data_hw5/homicide_data.csv') %>%
     resolution = case_when(
       disposition == 'Closed without arrest' ~ 'unsolved',
       disposition == 'Open/No arrest' ~ 'unsolved',
-      disposition == 'Closed by arrest' ~ 'solved'))
+      disposition == 'Closed by arrest' ~ 'solved')) %>%
+  #excluding non-major cities
+  filter(city_state != 'Tulsa, AL')
 ```
 
-After cleaning the data, 
+After cleaning the data, it has a total of `r nrow(homicide_data)` entries with demographic variables such as victim names, date of incident, victime race, age, sex, and location of incident, etc. Additionally, the `city_state` variable was created to combine and output location nicely; `resolution` was also updated.
 
 
 
