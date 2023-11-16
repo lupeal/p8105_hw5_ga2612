@@ -17,6 +17,8 @@ library(ggplot2)
 
 ## Problem 1
 
+The raw data for this problem is based on data gathered by the Washington Post on homicides in 50 large US cities. 
+
 ```{r, message = FALSE}
 #loading data
 homicide_data <- read_csv('data_hw5/homicide_data.csv') %>%
@@ -27,6 +29,10 @@ homicide_data <- read_csv('data_hw5/homicide_data.csv') %>%
       disposition == 'Open/No arrest' ~ 'unsolved',
       disposition == 'Closed by arrest' ~ 'solved'))
 ```
+
+After cleaning the data, 
+
+
 
 ```{r}
 
@@ -88,7 +94,7 @@ Make a second plot (or overlay on the first) the average estimate of μ̂ only i
 ```{r}
 sim_mean_pval <- function(mean, n = 30,sigma = 5){
   sim_data = tibble(
-    x = rnorm(n = n, mean = 0, sd = sigma))
+    x = rnorm(n = n, mean = mean, sd = sigma))
   
   mean_pval = sim_data %>%
     pull(x) %>%
@@ -126,10 +132,6 @@ sim_results_df %>%
 
 
 
-
-
-
-Make a plot showing the average estimate of μ̂ on the y axis and the true value of μ on the x axis.
 ```{r}
 #plot2
 sim_results_df %>%
@@ -142,19 +144,25 @@ sim_results_df %>%
   ylab('Average mu values') +
   ggtitle('Average estimated of mu_hat per true values of mu')
 ```
+We can see that after averaging all the mu's per the 5000 iterations it equals to it's original/true mu value. Since we have a high number of iterations, this makes sense. 
 
-Make a second plot (or overlay on the first) the average estimate of μ̂ only in samples for which the null was rejected on the y axis and the true value of μ on the x axis.
+
+
 ```{r}
 #plot3
 sim_results_df %>%
-  group_by(alternate_mus) %>%
-  summarize(power = mean(p.value < 0.05)) %>%
-  ggplot(aes(x = alternate_mus, y = mean(power))) +
+  mutate(
+    rejection = case_when(
+      p.value < 0.05 ~ 'reject',
+      TRUE ~ 'fail to reject')) %>%
+  group_by(alternate_mus, rejection) %>%
+  mutate(average_mu_values= mean(estimate)) %>%
+  ggplot(aes(x = alternate_mus, y = average_mu_values, color = rejection)) +
   geom_point() +
-  geom_line() + 
-  xlab('True mu value') +
-  ylab('Proportion of times null was rejected (power)') + 
-  ggtitle('Power vs True mu values')
+  geom_line() +
+  xlab('True mu values') +
+  ylab('Average mu values') +
+  ggtitle('Avg. estimated mu_hat per true values by power') 
 ```
 
-
+From the plot above, we can see that for those that failed to reject, the average mu values are being pulled closer to 0. This makes sense since the null hypothesis is that $\mu$ = 0, thus if we are failing to reject, it is likely that the $\mu$'s are closer to zero. The plot proves this. 
