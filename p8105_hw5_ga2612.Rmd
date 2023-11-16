@@ -57,6 +57,22 @@ baltimore_prop %>% tidy() %>%
 ```
 
 
+```{r}
+#creating tidy prop.test results
+prop_test_results <- city_homicide %>%
+  mutate(
+    prop_tests = map2(unsolved_homicides, total_homicides, \(x, y) prop.test(x = x, n = y)),
+    tidy_tests = map(prop_tests, tidy)) %>%
+  select(-prop_tests) %>%
+  unnest(tidy_tests) %>%
+  select(city_state, estimate, conf.low, conf.high) %>%
+  mutate(
+    city_state = fct_reorder(city_state, estimate))
+```
+
+```{r}
+
+```
 
 
 ## Problem 2
