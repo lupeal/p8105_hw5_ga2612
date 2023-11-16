@@ -21,8 +21,11 @@ library(ggplot2)
 #loading data
 homicide_data <- read_csv('data_hw5/homicide_data.csv') %>%
   mutate(
-    
-  )
+    city_state = str_c(city, state, sep = ', '), 
+    resolution = case_when(
+      disposition == 'Closed without arrest' ~ 'unsolved',
+      disposition == 'Open/No arrest' ~ 'unsolved',
+      disposition == 'Closed by arrest' ~ 'solved'))
 ```
 
 ```{r}
