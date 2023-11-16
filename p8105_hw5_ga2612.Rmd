@@ -46,8 +46,14 @@ city_homicide <- homicide_data %>%
 ```
 
 
-```{r}
+```{r, message = FALSE}
+#focusing on Balitmore
+baltimore_prop = prop.test(
+  x = filter(city_homicide, city_state == 'Baltimore, MD') %>% pull(unsolved_homicides),
+  n = filter(city_homicide, city_state == 'Baltimore, MD') %>% pull(total_homicides))
 
+baltimore_prop %>% tidy() %>%
+  knitr::kable()
 ```
 
 
