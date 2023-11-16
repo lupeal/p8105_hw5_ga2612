@@ -19,9 +19,15 @@ library(ggplot2)
 
 ```{r, message = FALSE}
 #loading data
-homicide_data <- read_csv('data_hw5/homicide_data.csv')
+homicide_data <- read_csv('data_hw5/homicide_data.csv') %>%
+  mutate(
+    
+  )
 ```
 
+```{r}
+
+```
 
 
 
@@ -103,21 +109,18 @@ sim_results_df <- expand_grid(
 
 Make a plot showing the proportion of times the null was rejected (the power of the test) on the y axis and the true value of μ on the x axis. Describe the association between effect size and power. 
 ```{r}
-sim_results_df %>%
-  mutate(power = case_when(
-      p.value < 0.05 ~ 1,
-      TRUE ~ 0)) %>%
-  group_by(alternate_mus) %>%
-  ggplot()
-```
-
-```{r}
+#plot1
 sim_results_df %>%
   group_by(alternate_mus) %>%
   summarize(power = mean(p.value < 0.05)) %>%
   ggplot(aes(x = alternate_mus, y = power)) +
-  geom_point()
+  geom_point() +
+  geom_line() + 
+  xlab('True mu value') +
+  ylab('Proportion of times null was rejected (power)') + 
+  ggtitle('Power vs True mu values')
 ```
+
 
 
 
@@ -125,11 +128,13 @@ sim_results_df %>%
 
 Make a plot showing the average estimate of μ̂ on the y axis and the true value of μ on the x axis.
 ```{r}
+#plot2
 sim_results_df %>%
   group_by(alternate_mus) %>%
   mutate(average_mu_values= mean(estimate)) %>%
   ggplot(aes(x = alternate_mus, y = average_mu_values)) +
   geom_point() +
+  geom_line() +
   xlab('True mu values') +
   ylab('Average mu values') +
   ggtitle('Average estimated of mu_hat per true values of mu')
@@ -137,7 +142,16 @@ sim_results_df %>%
 
 Make a second plot (or overlay on the first) the average estimate of μ̂ only in samples for which the null was rejected on the y axis and the true value of μ on the x axis.
 ```{r}
-
+#plot3
+sim_results_df %>%
+  group_by(alternate_mus) %>%
+  summarize(power = mean(p.value < 0.05)) %>%
+  ggplot(aes(x = alternate_mus, y = mean(power))) +
+  geom_point() +
+  geom_line() + 
+  xlab('True mu value') +
+  ylab('Proportion of times null was rejected (power)') + 
+  ggtitle('Power vs True mu values')
 ```
 
 
