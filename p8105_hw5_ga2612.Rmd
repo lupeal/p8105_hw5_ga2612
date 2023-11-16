@@ -35,12 +35,20 @@ homicide_data <- read_csv('data_hw5/homicide_data.csv') %>%
 After cleaning the data, it has a total of `r nrow(homicide_data)` entries with demographic variables such as victim names, date of incident, victime race, age, sex, and location of incident, etc. Additionally, the `city_state` variable was created to combine and output location nicely; `resolution` was also updated.
 
 
+```{r}
+#df homicides totals & those unsolved
+city_homicide <- homicide_data %>%
+  select(city_state, disposition, resolution) %>%
+  group_by(city_state) %>%
+  summarize(
+    total_homicides = n(),
+    unsolved_homicides = sum(resolution == 'unsolved'))
+```
+
 
 ```{r}
 
 ```
-
-
 
 
 
