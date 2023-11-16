@@ -71,7 +71,13 @@ prop_test_results <- city_homicide %>%
 ```
 
 ```{r}
-
+#plot
+prop_test_results %>%
+  mutate(city_state = fct_reorder(city_state, estimate)) %>%
+  ggplot(aes(x = city_state, y = estimate)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high)) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
 
