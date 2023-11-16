@@ -92,6 +92,7 @@ sim_mean_pval <- function(mean, n = 30,sigma = 5){
 ```
 
 ```{r}
+#df for all iterations
 sim_results_df <- expand_grid(
   iter = 1:5000,
   alternate_mus = c(1, 2, 3, 4, 5, 6)) %>%
@@ -109,6 +110,18 @@ sim_results_df %>%
   group_by(alternate_mus) %>%
   ggplot()
 ```
+
+```{r}
+sim_results_df %>%
+  group_by(alternate_mus) %>%
+  summarize(power = mean(p.value < 0.05)) %>%
+  ggplot(aes(x = alternate_mus, y = power)) +
+  geom_point()
+```
+
+
+
+
 
 Make a plot showing the average estimate of μ̂ on the y axis and the true value of μ on the x axis.
 ```{r}
